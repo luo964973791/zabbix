@@ -1,24 +1,76 @@
 #注意  
 如果要更改 MYSQL_ROOT_PASSWORD="xx"  要修改docker-compose.yml 里所有共三个参数否则启动不了，切记，比如：  
 
-zabbix-web-nginx-mysql:  
-    image: zabbix/zabbix-web-nginx-mysql:latest  
-    container_name: zabbix-web-nginx-mysql  
-    environment:  
-        - MYSQL_PASSWORD="zabbix-admin-123456"   
- 
- 
- zabbix-web-nginx-mysql:  
-    image: zabbix/zabbix-web-nginx-mysql:latest  
-    container_name: zabbix-web-nginx-mysql  
-    environment:    
-        - MYSQL_PASSWORD="zabbix-admin-123456"  
-
-
- zabbix-server-mysql:  
-        image: zabbix/zabbix-server-mysql  
-        container_name: zabbix-server-mysql  
-        environment:  
-            - MYSQL_PASSWORD="zabbix-admin-123456"   
-
-      
+version: "3"
+services:
+    zabbix-mysql:
+        image: mysql:5.7
+        container_name: zabbix-mysql
+        ports: 
+            - '3308:3306'
+        environment:
+            - MYSQL_ROOT_PASSWORD="zabbix-admin-123456"
+        volumes:
+            - ./mysql/data:/var/lib/mysql
+            - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+        restart: always
+    zabbix-java-gateway:
+        image: zabbix/zabbix-java-gateway:latest
+        container_name: zabbix-java-gateway
+        ports:
+            - "10052:10052"
+        volumes:
+            - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+        restart: always
+    zabbix-web-nginx-mysql:
+        image: zabbix/zabbix-web-nginx-mysql:latest
+        container_name: zabbix-web-nginx-mysql
+        environment:
+            - DB_SERVER_HOST=zabbix-mysql
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD="zabbix-admin-123456"
+            - ZBX_SERVER_HOST=zabbix-server-mysql
+            - PHP_TZ=Asia/Shanghai
+        ports:
+            - '666:80'
+            - '8443:443'
+        links:
+            - zabbix-mysql
+            - zabbix-java-gateway
+            - zabbix-server-mysql
+        depends_on:
+            - zabbix-mysql
+        volumes:
+            - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+        restart: always
+    zabbix-server-mysql:
+        image: zabbix/zabbix-server-mysql
+        container_name: zabbix-server-mysql
+        environment:
+            - DB_SERVER_HOST=zabbix-mysql
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD="zabbix-admin-123456"
+        ports:
+            - '10051:10051'
+        links:
+            - zabbix-mysql
+        depends_on:
+            - zabbix-mysql
+        volumes:
+            - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+        restart: always
+    zabbix-agent:
+        hostname: zabbix-agent
+        image: zabbix/zabbix-agent:latest
+        container_name: zabbix-agent
+        restart : always
+        ports:
+            - "10050:10050"
+        links:
+            - zabbix-server-mysql
+        environment:
+            ZBX_HOSTNAME: monitor
+            ZBX_UNSAFEUSERPARAMETERS: 1
+        volumes:
+            - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+        restart: always
