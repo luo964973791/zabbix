@@ -70,5 +70,6 @@ services:
             ZBX_HOSTNAME: monitor
             ZBX_UNSAFEUSERPARAMETERS: 1
         volumes:
+            - ./zabbix-agent/conf/zabbix-agent.conf:/etc/zabbix/zabbix_agentd.conf:rw
             - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
         restart: always
