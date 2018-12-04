@@ -26,3 +26,12 @@ docker restart zabbix-agent
 
 #出现内存警告设置  
 {Template OS Linux:system.swap.size[,pfree].last(0)}<50 and {Template OS Linux:system.swap.size[,free].last(0)}<>0
+
+#更改字体
+docker cp msyh.ttf zabbix-web-nginx-mysql:/usr/share/fonts/ttf-dejavu/
+#进入容器
+docker exec -it zabbix-web-nginx-mysql /bin/bash
+mv /usr/share/zabbix/fonts/graphfont.ttf /usr/share/zabbix/fonts/graphfont.ttf.bak
+ln -s /usr/share/fonts/ttf-dejavu/msyh.ttf /usr/share/zabbix/fonts/graphfont.ttf
+#重启web
+docker restart zabbix-web-nginx-mysql
