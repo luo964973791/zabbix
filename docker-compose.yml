@@ -67,7 +67,7 @@ services:
         links:
             - zabbix-server-mysql
         environment:
-            ZBX_HOSTNAME: monitor
+            ZBX_HOSTNAME: zabbix-agent
             ZBX_UNSAFEUSERPARAMETERS: 1
         volumes:
             - ./zabbix-agent/conf/zabbix-agent.conf:/etc/zabbix/zabbix_agentd.conf:rw
