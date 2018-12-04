@@ -30,7 +30,7 @@ services:
             - PHP_TZ=Asia/Shanghai
         ports:
             - '666:80'
-            - '8443:443'
+            - '30443:443'
         links:
             - zabbix-mysql
             - zabbix-java-gateway
