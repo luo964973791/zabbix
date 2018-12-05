@@ -27,3 +27,7 @@ ServerActive=172.23.0.4
 
 #最最最重要的要重启zabbix-agent
 docker restart zabbix-agent
+
+
+#出现内存警告设置
+{Template OS Linux:system.swap.size[,pfree].last(0)}<50 and {Template OS Linux:system.swap.size[,free].last(0)}<>0
