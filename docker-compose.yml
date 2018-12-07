@@ -6,10 +6,20 @@ services:
         ports: 
             - '3308:3306'
         environment:
-            - MYSQL_ROOT_PASSWORD="zabbix-admin-123456"
+
+            - MYSQL_ROOT_PASSWORD=123456
+            - MYSQL_DATABASE=zabbix
+            - MYSQL_USER=zabbix
+            - MYSQL_PASSWORD=zabbix
         volumes:
             - ./mysql/data:/var/lib/mysql
             - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+
+        command:
+            --character-set-server=utf8mb4
+            --collation-server=utf8mb4_general_ci
+            --explicit_defaults_for_timestamp=true
+            --sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
         restart: always
     zabbix-java-gateway:
         image: zabbix/zabbix-java-gateway:latest
@@ -24,8 +34,9 @@ services:
         container_name: zabbix-web-nginx-mysql
         environment:
             - DB_SERVER_HOST=zabbix-mysql
-            - MYSQL_USER=root
-            - MYSQL_PASSWORD="zabbix-admin-123456"
+            - MYSQL_DATABASE=zabbix
+            - MYSQL_USER=zabbix
+            - MYSQL_PASSWORD=zabbix
             - ZBX_SERVER_HOST=zabbix-server-mysql
             - PHP_TZ=Asia/Shanghai
         ports:
@@ -45,8 +56,9 @@ services:
         container_name: zabbix-server-mysql
         environment:
             - DB_SERVER_HOST=zabbix-mysql
-            - MYSQL_USER=root
-            - MYSQL_PASSWORD="zabbix-admin-123456"
+            - MYSQL_DATABASE=zabbix
+            - MYSQL_USER=zabbix
+            - MYSQL_PASSWORD=zabbix
             - ZBX_AGENT=zabbix-agent
         ports:
             - '10051:10051'
