@@ -3,7 +3,7 @@
 ```javascript
 wget http://repo.mysql.com/yum/mysql-8.0-community/el/7/x86_64/mysql80-community-release-el7-3.noarch.rpm
 rpm -ivh mysql80-community-release-el7-3.noarch.rpm
-yum remove mariadb -y
+yum remove mariadb-libs -y
 yum install mysql-community-client mysql-community-server -y
 systemctl enable mysqld && systemctl start mysqld
 cat /var/log/mysqld.log | grep password #拿到root密码.
