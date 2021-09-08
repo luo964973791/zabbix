@@ -82,5 +82,16 @@ systemctl enable zabbix-agent
 
  #在zabbix-server服务器上面测试是否可以连接客户端.
  zabbix_get -s 172.27.0.8 -p 10050 -k system.uname
+ 
+ 
+ #修改字体
+ cd /usr/share/zabbix/assets/fonts
+ cp /root/simkai.ttf .
+ chown zabbix:zabbix simkai.ttf
+ 
+ vi /usr/share/zabbix/include/defines.inc.php  #修改81行和122行
+ define('ZBX_GRAPH_FONT_NAME',           'simkai');
+ define('ZBX_FONT_NAME', 'simkai');
+ systemctl restart rh-nginx116-nginx rh-php72-php-fpm
 ```
 
