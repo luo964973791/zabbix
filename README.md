@@ -28,7 +28,7 @@ vi /etc/yum.repos.d/zabbix.repo
 [zabbix-frontend]
 enabled=1   #参数改为1
 
-yum install zabbix-web-mysql-scl zabbix-nginx-conf-scl
+yum install zabbix-web-mysql-scl zabbix-nginx-conf-scl zabbix-get -y
 ```
 
 ### 三、配置数据库,修改zabbix-server配置文件
@@ -78,5 +78,9 @@ Hostname=node2
  
 systemctl restart zabbix-agent
 systemctl enable zabbix-agent
+
+
+ #在zabbix-server服务器上面测试是否可以连接客户端.
+ zabbix_get -s 172.27.0.8 -p 10050 -k system.uname
 ```
 
