@@ -9,7 +9,7 @@ systemctl enable mysqld && systemctl start mysqld
 cat /var/log/mysqld.log | grep password #拿到root密码.
 
 [root@node1 zabbix]# mysql -uroot -p'7m&=V)p>-.of'
-mysql> alter user 'root'@'localhost' identified by 'Tcdn@2021';
+mysql> alter user 'root'@'localhost' identified by 'Test!@123';
 Query OK, 0 rows affected (0.01 sec)
 mysql> flush privileges;
 Query OK, 0 rows affected (0.00 sec)
@@ -37,9 +37,9 @@ yum install zabbix-web-mysql-scl zabbix-nginx-conf-scl zabbix-get -y
 # mysql -uroot -p
 password
 mysql> create database zabbix character set utf8 collate utf8_bin;
-mysql> create user zabbix@localhost identified by 'Tcdn@2021';
+mysql> create user zabbix@localhost identified by 'Test!@123';
 mysql> grant all privileges on zabbix.* to zabbix@localhost;
-mysql> ALTER USER 'zabbix'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Tcdn@2021';
+mysql> ALTER USER 'zabbix'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Test!@123';
 mysql> FLUSH PRIVILEGES;
 mysql> quit;
 zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p zabbix
