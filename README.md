@@ -10,7 +10,8 @@ cat /var/log/mysqld.log | grep password #拿到root密码.
 
 [root@node1 zabbix]# mysql -uroot -p'7m&=V)p>-.of'
 mysql> alter user 'root'@'localhost' identified by 'Test!@123';
-Query OK, 0 rows affected (0.01 sec)
+mysql> use mysql;
+mysql> update user set host = '%' where user = 'root';
 mysql> flush privileges;
 Query OK, 0 rows affected (0.00 sec)
 ```
